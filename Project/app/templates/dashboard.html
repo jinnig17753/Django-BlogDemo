@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <link href="static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css" />
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.css"> -->
+    <link rel="stylesheet" href="/static/css/dashboard.css" type="text/css" />
+  </head>
+  <body>
+    <div class="wrapper">
+      <!-- Nav -->
+      <header class="header">
+        <div class="header-wrapper">
+          <div class="header-title">
+            <a href="/dashboard" class="header-item header-link">Dashboard</a>
+          </div>
+          <div class="nav">
+            <a href="/" class="nav-item">Home</a>
+            <a href="/db-post" class="nav-item">New Post</a>
+            <!-- <a href="/" class="nav-item">Setting</a> -->
+            <a href="/logout" class="nav-item">Logout</a>
+          </div>
+        </div>
+      </header>
+      <!-- Main -->
+      <main class="main">
+        <div class="container">
+          <div class="menu">
+            <ul class="menu-nav">
+              <li class="submenu selected">
+                <div class="sub-title"><a href="/dashboard" class="submenu-item">文章管理</a></div>
+              </li>
+              <li class="submenu">
+                <div class="sub-title"><a href="/db-index" class="submenu-item">首頁管理</a></div>
+              </li>
+              <li class="submenu">
+                <div class="sub-title"><a href="/db-about" class="submenu-item">關於</a></div>
+              </li>
+              <li class="submenu">
+                <div class="sub-title"><a href="/db-contact" class="submenu-item">聯絡</a></div>
+              </li>
+              <li class="submenu">
+                <div class="sub-title"><a href="/db-comment" class="submenu-item">留言</a></div>
+              </li>
+              <li class="submenu">
+                <div class="sub-title"><a href="/db-settings" class="submenu-item">設定</a></div>
+              </li>
+            </ul>
+          </div>
+          <div class="main-table">
+            <div class="head-row">
+              <button class="btn btn-primary" onclick="check_oreversed()">反選</button>
+              <button class="btn btn-primary" onclick="location.href='/db-post'">發表</button>
+              <button class="btn btn-primary" onclick="del_list('article')">刪除</button>
+              <button class="btn btn-primary" onclick="hide_list()">隱藏/顯示</button>
+            </div>
+            <div class="posts">
+              <div class="table-wrapper">
+                <div class="table-head">
+                  <div class="row">
+                    <div class="cell">
+                      <input type="checkbox" class="table-checkbox" onclick="check_all(this)" />
+                    </div>
+                    <div class="cell">
+                      Date
+                      <!-- <span class="caret-wrapper"><i class="sort-caret ascending"></i><i class="sort-caret descending"></i></span> -->
+                    </div>
+                    <div class="cell cell-2">
+                      Title
+                      <!-- <span class="caret-wrapper"><i class="sort-caret ascending"></i><i class="sort-caret descending"></i></span> -->
+                    </div>
+                    <div class="cell cell-sm-icon">
+                      Active
+                      <!-- <span class="caret-wrapper"><i class="sort-caret ascending"></i><i class="sort-caret descending"></i></span> -->
+                    </div>
+                    <div class="cell"></div>
+                  </div>
+                </div>
+                <div class="table-body">
+                  {% for article in params.article %}
+                  <div class="row">
+                    <div class="cell">
+                      <input type="checkbox" class="table-checkbox" name="select" value="{{article.id}}" />
+                    </div>
+                    <div class="cell">
+                      {{article.pubdate}}
+                    </div>
+                    <div class="cell cell-2">
+                      {{article.title}}
+                    </div>
+                    <div class="cell cell-sm-icon">
+                      <button type="button" class="btn-primary btn-sm is-round" onclick="hide(this.value);" value="{{article.id}}">
+                        {% if article.is_hide %}
+                        <i class="fas fa-eye"></i>
+                        {% else %}
+                        <i class="fas fa-eye-slash"></i>
+                        {% endif %}
+                      </button>
+                    </div>
+                    <div class="cell">
+                      <button type="button" class="btn-primary btn-green btn-sm is-round" onclick="location.href='/db-edit?id={{article.id}}'"><i class="far fa-edit"></i></button>
+                      <button type="button" class="btn-primary btn-red btn-sm is-round" onclick="del('dashboard',this.value);" value="{{article.id}}"><i class="fas fa-trash"></i></button>
+                    </div>
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+            <div class="page">
+              <ul class="pagination">
+                {% if params.paginate.has_prev %}
+                <li class="page-item">
+                  {% else %}
+                </li>
+
+                <li class="page-item disabled">
+                  {% endif %}
+                  <a class="page-link" href="/dashboard?page={{params.paginate.prev_num }}">Previous</a>
+                </li>
+                {% for i in params.paginate.iter_pages(1,1,3,1) %} {% if i %} {% if i == params.paginate.page %}
+                <li class="page-item selected">
+                  {% else %}
+                </li>
+
+                <li class="page-item">
+                  {% endif %}
+                  <a class="page-link" href="/dashboard?page={{i}}">
+                    {{i}}
+                  </a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                  <a class="page-link">...</a>
+                </li>
+                {% endif %} {% endfor %} {% if params.paginate.has_next %}
+                <li class="page-item">
+                  {% else %}
+                </li>
+
+                <li class="page-item disabled">
+                  {% endif %}
+                  <a class="page-link" href="/dashboard?page={{params.paginate.next_num }}">Next</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.all.min.js"></script>
+    <script src="/static/js/dashboard.js"></script>
+  </body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rivan's Blog</title>
+    <!-- Custom fonts for this template -->
+    <link href="/static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css" />
+    <link href="/static/css/blog.css" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- Nav -->
+    <nav class="flex-top" id="mainNav">
+      <div class="container">
+        <a class="logo" href="/">Rivan's Blog</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" onclick="openNav();">
+          Menu
+          <i class="fas fa-bars"></i>
+        </button>
+        <div id="navbarResponsive">
+          <ul class="navbar">
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/contact">Contact</a></li>
+            {% if not params.user %}
+            <li><a href="/login">Login</a></li>
+            {% else %}
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/logout">Logout</a></li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+    {% if params.home %}
+    <!-- Page header -->
+    <header class="masthead" style="background-image: url('/static/{{params.home.bg_image}}');">
+      <div class="overlay">
+        <div class="container">
+          <div class="site-heading mx-auto">
+            <h1>
+              {% if not params.user %} {{params.home.title}} {% else %} Welcome Back. {% endif %}
+            </h1>
+            <span class="subheading">{{params.home.subtitle}}</span>
+          </div>
+        </div>
+      </div>
+    </header>
+    {% endif %}
+
+    <!-- Main Content -->
+    <div class="container">
+      <div id="post" class="mx-auto">
+        {% for article in params.article %}
+        <div class="post-preview">
+          {% if article.bg_image %}
+          <a href="/post?id={{article.id}}"> <img src="/static/{{article.bg_image}}" /></a>
+          {% endif %}
+          <a href="/post?id={{article.id}}">
+            <h2 class="post-title">
+              {{article.title}}
+            </h2>
+          </a>
+          {%if article.subtitle %}
+          <h3 class="post-content">
+            {{article.subtitle}}
+          </h3>
+          {% endif %}
+          <p class="post-meta">
+            Posted by
+            <a href="/about"> <i class="fas fa-user-circle fa-fw"></i>Rivan</a>
+            on {{article.pubdate.strftime("%Y-%m-%d")}}
+          </p>
+          {% endfor %}
+        </div>
+        <hr />
+        <!-- <div class="post-preview">
+          <a href="/post"> <img src="/static/img/post-bg.jpg" /></a>
+
+          <a href="/post">
+          <a href="/post">
+            <h2 class="post-title">
+              I believe every human has a finite number of heartbeats. I don't intend to waste any of mine.
+            </h2>
+          </a>
+          <p class="post-meta">
+            Posted by
+            <a href="#">
+              <i class="fas fa-user-circle fa-fw"></i>Rivan</a>
+            on September 18, 2019
+          </p>
+        </div>
+        <hr />
+        <div class="post-preview">
+          <a href="/post"> <img src="/static/img/post-bg.jpg" /></a>
+
+          <a href="/post">
+          <a href="/post">
+            <h2 class="post-title">
+              Science has not yet mastered prophecy
+            </h2>
+          </a>
+          <h3 class="post-content">
+            We predict too much for the next year and yet far too little for the next ten.
+          </h3>
+          <p class="post-meta">
+            Posted by
+            <a href="#">
+              <i class="fas fa-user-circle fa-fw"></i>Rivan</a>
+            on August 24, 2019
+          </p>
+        </div>
+        <hr /> -->
+
+        <!-- Pager -->
+        <!-- <div class="clearfix">
+          <a class="btn btn-primary" href="#">Older Posts &rarr;</a>
+        </div> -->
+        <ul class="pagination">
+          {% if params.paginate.has_prev %}
+          <li class="page-item">
+            {% else %}
+          </li>
+
+          <li class="page-item disabled">
+            {% endif %}
+            <a class="page-link" href="{{url_for('main.main_index', page=params.paginate.prev_num)}}">Previous</a>
+          </li>
+          {% for i in params.paginate.iter_pages(1,1,3,1) %} {% if i %} {% if i == params.paginate.page %}
+          <li class="page-item active">
+            {% else %}
+          </li>
+
+          <li class="page-item">
+            {% endif %}
+            <a class="page-link" href="{{url_for('main.main_index', page=i)}}">
+              {{i}}
+            </a>
+          </li>
+          {% else %}
+          <li class="page-item disabled">
+            <a class="page-link">...</a>
+          </li>
+          {% endif %} {% endfor %} {% if params.paginate.has_next %}
+          <li class="page-item">
+            {% else %}
+          </li>
+
+          <li class="page-item disabled">
+            {% endif %}
+            <a class="page-link" href="{{url_for('main.main_index', page=params.paginate.next_num)}}">Next</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <hr />
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div id="list" class="mx-auto">
+          <ul class="list-inline">
+            <li class="list-inline-item">
+              <a href="#">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="#">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="#">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+          </ul>
+          <p class="copyright">
+            &copy; 2020 <a href="#">Rivan</a> <a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>
+          </p>
+        </div>
+      </div>
+    </footer>
+    <div id="fixed-buttons" class="animated faster fadeIn" style="display: none;">
+      <a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+        <i class="fas fa-arrow-up fa-fw"></i>
+      </a>
+      <!-- <a href="#" id="view-comments" class="fixed-button" title="View Comments">
+      <i class="fas fa-comment fa-fw"></i>
+      </a> -->
+    </div>
+    <script src="/static/js/blog.js"></script>
+  </body>
+</html>

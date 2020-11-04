@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rivan's Blog</title>
+    <!-- Custom fonts for this template -->
+    <link href="static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css" />
+    <link href="/static/css/blog.css" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- Nav -->
+    <nav class="flex-top" id="mainNav">
+      <div class="container">
+        <a class="logo" href="/">Rivan's Blog</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" onclick="openNav();">
+          Menu
+          <i class="fas fa-bars"></i>
+        </button>
+        <div id="navbarResponsive">
+          <ul class="navbar">
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/contact">Contact</a></li>
+            {% if not params.user %}
+            <li><a href="/login">Login</a></li>
+            {% else %}
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/logout">Logout</a></li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+    {% if params.contact %}
+    <!-- Page Header -->
+    <header class="masthead" style="background-image: url('/static/{{params.contact.bg_image}}');">
+      <div class="overlay">
+        <div class="container">
+          <div id="head">
+            <div class="site-heading">
+              <h1>{{params.contact.title}}</h1>
+              <span class="subheading">{{params.contact.subtitle}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+      <div id="post" class="mx-auto">
+        <p>
+          {{params.contact.content|safe}}
+        </p>
+        <form method="post" name="sentMessage" id="contactForm" novalidate>
+          <div class="control-group">
+            <div class="form-group floating-label-form-group controls">
+              <label>Name</label>
+              <input type="text" class="form-control" placeholder="Name" id="name" name="name" required />
+              <p class="help-block text-danger"></p>
+            </div>
+          </div>
+          <div class="control-group">
+            <div class="form-group floating-label-form-group controls">
+              <label>Email Address</label>
+              <input type="email" class="form-control" placeholder="Email Address" id="email" name="email" required />
+              <p class="help-block text-danger"></p>
+            </div>
+          </div>
+          <div class="control-group">
+            <div class="form-group floating-label-form-group controls">
+              <label>Subject</label>
+              <input type="text" class="form-control" placeholder="Subject" id="subject" name="subject" required />
+              <p class="help-block text-danger"></p>
+            </div>
+          </div>
+          <div class="control-group">
+            <div class="form-group floating-label-form-group controls">
+              <label>Message</label>
+              <textarea rows="5" class="form-control" placeholder="Message" id="message" name="message"required></textarea>
+              <p class="help-block text-danger"></p>
+            </div>
+          </div>
+          <br />
+          <div id="success"></div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary" id="sendMessageButton">
+              Send
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <hr />
+
+    {% endif %}
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div id="list" class="mx-auto">
+          <ul class="list-inline">
+            <li class="list-inline-item">
+              <a href="#">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="#">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="#">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+          </ul>
+          <p class="copyright">
+            &copy; 2020 <a href="#">Rivan</a> <a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a>
+          </p>
+        </div>
+      </div>
+    </footer>
+    <div id="fixed-buttons" class="animated faster fadeIn" style="display: none;">
+      <a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+        <i class="fas fa-arrow-up fa-fw"></i>
+      </a>
+      <!-- <a href="#" id="view-comments" class="fixed-button" title="View Comments">
+      <i class="fas fa-comment fa-fw"></i>
+      </a> -->
+    </div>
+    <script src="/static/js/blog.js"></script>
+  </body>
+</html>
